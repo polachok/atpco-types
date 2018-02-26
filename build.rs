@@ -64,35 +64,36 @@ fn generate_passenger_kind() -> Result<(), std::io::Error> {
     write!(file, "}}\n")?;
 
     // serialize for enum
-    write!(file, "#[cfg(feature = \"serde\")]\n")?;
-    write!(file, "impl ::serde::Serialize for PassengerKind {{\n")?;
-    write!(file, "fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error> where S: ::serde::Serializer {{\n")?;
-    write!(file, "\tserializer.serialize_str(self.name())\n")?;
-    write!(file, "}}\n}}\n")?;
+    write!(file, "#[cfg(feature = \"serde\")]
+                  impl ::serde::Serialize for PassengerKind {{
+                    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error> where S: ::serde::Serializer {{
+                        serializer.serialize_str(self.name())
+                    }}
+                  }} ")?;
 
     // deserialize for enum
-    write!(file, "#[cfg(feature = \"serde\")]\n")?;
-    write!(file, "impl<'de> ::serde::Deserialize<'de> for PassengerKind {{\n")?;
-    write!(file, "fn deserialize<D>(deserializer: D) -> Result<Self, D::Error> where D: ::serde::Deserializer<'de> {{\n")?;
-    write!(file, "use ::serde::de::Visitor;\n")?;
-    write!(file, "use ::serde::de::Unexpected;\n")?;
-    write!(file, "use std::fmt;\n")?;
-    write!(file, "use std::str::FromStr;\n")?;
-    write!(file, "struct PassengerKindVisitor;\n")?;
-    write!(file, "impl <'de> Visitor<'de> for PassengerKindVisitor {{\n
-                    type Value = PassengerKind;
+    write!(file, "#[cfg(feature = \"serde\")]
+               impl<'de> ::serde::Deserialize<'de> for PassengerKind {{
+                    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error> where D: ::serde::Deserializer<'de> {{\n
+                    use ::serde::de::Visitor;
+                    use ::serde::de::Unexpected;\n
+                    use std::fmt;
+                    use std::str::FromStr;
+                    struct PassengerKindVisitor;
+                    impl <'de> Visitor<'de> for PassengerKindVisitor {{\n
+                        type Value = PassengerKind;
 
-                    fn expecting(&self, f: &mut fmt::Formatter) -> fmt::Result {{
-                        f.write_str(\"valid passenger kind\")
-                    }}
+                        fn expecting(&self, f: &mut fmt::Formatter) -> fmt::Result {{
+                            f.write_str(\"valid passenger kind\")
+                        }}
 
-                    fn visit_str<E>(self, value: &str) -> Result<PassengerKind, E> where E: ::serde::de::Error {{
-                        match PassengerKind::from_str(value) {{
-                            Ok(pk) => Ok(pk),
-                            Err(_) => Err(E::invalid_value(Unexpected::Str(value), &\"passenger kind\")),
+                        fn visit_str<E>(self, value: &str) -> Result<PassengerKind, E> where E: ::serde::de::Error {{
+                            match PassengerKind::from_str(value) {{
+                                Ok(pk) => Ok(pk),
+                                Err(_) => Err(E::invalid_value(Unexpected::Str(value), &\"passenger kind\")),
+                            }}
                         }}
                     }}
-                }}
 
                 deserializer.deserialize_str(PassengerKindVisitor)
         ")?;
