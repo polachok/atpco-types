@@ -17,6 +17,11 @@ impl FareCode {
         let s = &(self.0)[1..1 + len as usize];
         unsafe { str::from_utf8_unchecked(s) }
     }
+
+    pub fn as_bytes(&self) -> &[u8] {
+        let len = (self.0)[0];
+        &self.0[1..1+len as usize]
+    }
 }
 
 #[derive(Debug)]
