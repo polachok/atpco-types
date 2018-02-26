@@ -1,0 +1,10 @@
+[package]
+name = "atpco-types"
+version = "0.1.0"
+authors = ["Alexander Polyakov <aleksandr.polyakov@kupibilet.ru>"]
+
+[dependencies]
+serde = { version = "1.0", optional = true }
+
+[build-dependencies]
+csv = "0.15.0"
