@@ -2,6 +2,10 @@
 name = "atpco-types"
 version = "0.1.0"
 authors = ["Alexander Polyakov <aleksandr.polyakov@kupibilet.ru>"]
+description = "ATPCO types"
+license = "MIT"
+repository = "https://github.com/polachok/atpco-types"
+homepage = "https://github.com/polachok/atpco-types"
 
 [dependencies]
 serde = { version = "1.0", optional = true }
